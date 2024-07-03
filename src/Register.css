@@ -1,0 +1,120 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Ocupa toda la altura visible */
+  background-color: #14181c; /* Color de fondo principal */
+}
+
+.register-form {
+  background: #fff; /* Fondo blanco para formularios */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Ancho del formulario */
+  max-width: 400px; /* Máximo ancho del formulario para controlar el tamaño */
+  box-sizing: border-box; /* Ajuste del box-model para incluir padding y border */
+  margin-bottom: 20px; /* Espacio inferior para separar de los botones */
+  text-align: center; /* Centrar texto dentro del formulario */
+}
+
+.register-form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.register-form .form-group {
+  margin-bottom: 15px;
+}
+
+.register-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  text-align: left; /* Alinear etiquetas a la izquierda */
+}
+
+.register-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ajustar tamaño incluyendo padding y border */
+}
+
+.register-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff; /* Azul para botones de login y registro */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; /* Espaciado superior */
+}
+
+.login-link {
+  margin-top: 10px; /* Ajusta el margen superior según sea necesario */
+  font-size: 14px;
+  color: #000000; /* Cambia el color del texto aquí */
+  text-align: center; /* Centra el texto */
+  cursor: pointer;
+}
+
+.login-link span {
+  text-decoration: underline;
+}
+
+/* Estilos para los botones de inicio de sesión y registro con logos */
+.social-register {
+  display: flex;
+  justify-content: center;
+  width: 80%; /* Ancho del contenedor de botones */
+  max-width: 400px; /* Máximo ancho para controlar el tamaño */
+  margin: 0 auto; /* Centrar horizontalmente */
+}
+
+.social-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 10px; /* Espaciado entre botones */
+}
+
+.social-button img {
+  width: 40px; /* Tamaño de los logos */
+}
+
+/* Estilos para los botones de redes sociales */
+.social-button.facebook {
+  background-color: #3b5998; /* Azul de Facebook */
+}
+
+.social-button.google {
+  background-color: #db4437; /* Rojo de Google */
+}
+
+.social-button.apple {
+  background-color: #000000; /* Negro de Apple */
+  color: #ffffff; /* Texto blanco para contraste */
+}
+
+.social-button.xbox {
+  background-color: #107c10; /* Verde de Xbox */
+}
+
+.social-button.playstation {
+  background-color: #003087; /* Azul de PlayStation */
+}
+
+
+.social-button:hover {
+  filter: brightness(85%); /* Reducir el brillo al 85% */
+  transition: filter 0.3s; /* Transición suave */
+}
