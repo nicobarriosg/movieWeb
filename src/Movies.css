@@ -1,55 +1,140 @@
 .carousel-item {
-    position: relative;
-  }
-  
-  .overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: .5s ease;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .carousel-item:hover .overlay {
-    opacity: 1;
-  }
-  
-  .overlay .favorite-button {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-size: 24px;
-    color: #ccc;
-    transition: color 0.3s ease;
-  }
-  
-  .overlay .favorite-button.active {
-    color: #006eff; /* Cambiar a tu color deseado al seleccionar */
-  }
-  
-  .favorites-container {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 20px;
-  }
-  
-  .favorite-card {
-    margin: 10px;
-    text-align: center;
-  }
-  
-  .favorite-image {
-    width: 100px;
-    height: 150px;
-    object-fit: cover;
-  }
-  
+  position: relative;
+  transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.carousel-item:hover {
+  transform: scale(0.95);
+  border: 3px solid #789;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-item:hover .overlay {
+  opacity: 1;
+}
+
+.overlay .favorite-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 24px;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.overlay .favorite-button.active {
+  color: #006eff; /* Cambiar a tu color deseado al seleccionar */
+}
+
+.overlay .play-trailer-button {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.overlay .play-trailer-button:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.favorites-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.favorite-card {
+  margin: 10px;
+  text-align: center;
+}
+
+.favorite-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.time-window-buttons, .category-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.time-window-buttons button, .category-buttons button {
+  margin: 0 5px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #789;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.time-window-buttons button.active, .category-buttons button.active {
+  background-color: #345;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  background-color: #2e2e2e;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 800px;
+  position: relative;
+}
+
+.modal-content iframe {
+  width: 100%;
+  height: 400px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

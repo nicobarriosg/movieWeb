@@ -48,7 +48,7 @@ body, html {
 .banner {
   position: relative;
   width: 80%; /* Ajusta el ancho del banner */
-  height: 500px; /* Puedes ajustar la altura según tus necesidades */
+  height: 800px; /* Puedes ajustar la altura según tus necesidades */
   overflow: hidden;
   margin: auto; /* Centra el banner horizontalmente */
 }
@@ -81,7 +81,6 @@ body, html {
   background: linear-gradient(to bottom, rgba(46, 46, 46, 0), #14181c);
   z-index: 1; /* Difuminado detrás del texto */
 }
-
 
 /* Estilos para el texto del banner */
 .banner-text {
@@ -122,6 +121,26 @@ body, html {
 
 .banner-button:hover {
   background-color: #003e8f; /* Color del botón al pasar el mouse */
+}
+
+/* Estilos para el lado derecho del banner */
+/* Estilos para el texto del banner */
+.side-content {
+  position: absolute;
+  top: 50%;
+  right: 20px; /* Ajusta la distancia desde el borde derecho */
+  transform: translateY(-50%) rotate(180deg);
+  color: #9ab;
+  text-align: right; /* Alinea el texto a la derecha */
+  font-size: 1em; /* Ajusta el tamaño de fuente según tus preferencias */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Añade sombra al texto para mayor legibilidad */
+  z-index: 2; /* Texto delante del difuminado */
+  writing-mode: vertical-rl; /* Texto vertical */
+}
+
+.side-content p {
+  margin: 0;
+  white-space: nowrap; /* Evita que el texto se desborde */
 }
 
 

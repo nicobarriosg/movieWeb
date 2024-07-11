@@ -1,166 +1,104 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import './Movies.css'; // Importa los estilos adicionales para el botón de favoritos
-import { peliculas } from './components/Links/peliculas'; // Importa la lista de películas seleccionadas
-
-const ImageCarousel = ({ items, onAddToFavorites, onShowDetails }) => {
-  const [favorites, setFavorites] = useState([]);
-
-  const toggleFavorite = (item) => {
-    if (favorites.includes(item.id)) {
-      setFavorites(favorites.filter((id) => id !== item.id));
-    } else {
-      setFavorites([...favorites, item.id]);
-    }
-    onAddToFavorites(item); // Llamar a la función de agregar a favoritos desde props
-  };
-
-  const handleShowDetails = (item) => {
-    onShowDetails(item); // Llamar a la función de mostrar detalles desde props
-  };
-
-  return (
-    <div className="carousel-container">
-      <Carousel showThumbs={false} infiniteLoop useKeyboardArrows showIndicators={false} showStatus={false} centerMode centerSlidePercentage={20}>
-        {items.map((item) => (
-          <div key={item.id} className="carousel-item">
-            <img src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title || item.name} onClick={() => handleShowDetails(item)} />
-            <div className="overlay">
-              <span
-                className={`favorite-button ${favorites.includes(item.id) ? 'active' : ''}`}
-                onClick={() => toggleFavorite(item)}
-              >
-                &#10084; {/* Corazón Unicode */}
-              </span>
-            </div>
-          </div>
-        ))}
-      </Carousel>
-    </div>
-  );
-};
+import ImageCarousel from './components/ImageCarousel';
+import './Movies.css'; // Importa los estilos adicionales
 
 const Movies = ({ onAddToFavorites }) => {
-  const [topRatedSeries, setTopRatedSeries] = useState([]);
-  const [currentlyAiringSeries, setCurrentlyAiringSeries] = useState([]);
-  const [chileanMovies, setChileanMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [trending, setTrending] = useState([]);
+  const [popularTV, setPopularTV] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [popularAnimeJapanese, setPopularAnimeJapanese] = useState([]);
+  const [popularAnimeAmerican, setPopularAnimeAmerican] = useState([]);
+  const [latestTrailers, setLatestTrailers] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null); // Estado para almacenar el elemento seleccionado
+  const [selectedTrailer, setSelectedTrailer] = useState(null); // Estado para almacenar el trailer seleccionado
+  const [timeWindow, setTimeWindow] = useState('day'); // Estado para el período de tiempo
+  const [popularCategory, setPopularCategory] = useState('tv'); // Estado para la categoría de "Lo más Popular"
+  const [animeCategory, setAnimeCategory] = useState('japanese'); // Estado para la categoría de Anime
 
   const API_KEY = '80e89e656f3520c549cf1e304130baec';
 
   useEffect(() => {
-    const fetchTopRatedSeries = async () => {
+    const fetchTrending = async () => {
       try {
-        // Obtener las series mejor ranqueadas con puntuación superior al 50%
-        const topRatedSeriesRequests = [
-          fetchTopRatedSeriesByCompany(154651, 5), // ID de Chilevisión en TMDB
-          fetchTopRatedSeriesByNetwork(646, 5),    // ID de TVN en TMDB
-          fetchTopRatedSeriesByCompany(75686, 5)   // ID de Mega en TMDB
-        ];
-
-        const topRatedSeriesResponses = await Promise.all(topRatedSeriesRequests);
-        const topRatedSeries = topRatedSeriesResponses.flat(); // Convertir el array de arrays en un solo array
-        setTopRatedSeries(topRatedSeries);
+        // Obtener las tendencias (hoy o esta semana)
+        const response = await axios.get(`https://api.themoviedb.org/3/trending/all/${timeWindow}?api_key=${API_KEY}`);
+        setTrending(response.data.results.slice(0, 20)); // Obtener las 20 primeras tendencias
       } catch (error) {
-        console.error('Error fetching top rated series:', error);
+        console.error('Error fetching trending:', error);
       }
     };
 
-    const fetchCurrentlyAiringSeries = async () => {
+    const fetchPopularTV = async () => {
       try {
-        // Obtener las series actualmente en emisión producidas por Chilevisión, TVN y Mega
-        const currentlyAiringSeriesRequests = [
-          fetchCurrentlyAiringSeriesByCompany(154651), // ID de Chilevisión en TMDB
-          fetchCurrentlyAiringSeriesByNetwork(646),    // ID de TVN en TMDB
-          fetchCurrentlyAiringSeriesByCompany(75686)   // ID de Mega en TMDB
-        ];
-
-        const currentlyAiringSeriesResponses = await Promise.all(currentlyAiringSeriesRequests);
-        const currentlyAiringSeries = currentlyAiringSeriesResponses.flat(); // Convertir el array de arrays en un solo array
-        setCurrentlyAiringSeries(currentlyAiringSeries);
+        // Obtener lo más popular en televisión
+        const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}`);
+        setPopularTV(response.data.results.slice(0, 20)); // Obtener las 20 primeras series de TV populares
       } catch (error) {
-        console.error('Error fetching currently airing series:', error);
+        console.error('Error fetching popular TV:', error);
       }
     };
 
-    const fetchChileanMovies = async () => {
+    const fetchPopularMovies = async () => {
       try {
-        // Obtener películas producidas en Chile
-        const response = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&region=CL&language=es-CL&query=chile`);
-        const chileanMovies = response.data.results.slice(0, 20);
-        setChileanMovies(chileanMovies);
+        // Obtener lo más popular en cine
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`);
+        setPopularMovies(response.data.results.slice(0, 20)); // Obtener las 20 primeras películas populares
       } catch (error) {
-        console.error('Error fetching Chilean movies:', error);
+        console.error('Error fetching popular movies:', error);
       }
     };
 
-    fetchTopRatedSeries();
-    fetchCurrentlyAiringSeries();
-    fetchChileanMovies();
-  }, [API_KEY]);
+    const fetchPopularAnimeJapanese = async () => {
+      try {
+        // Obtener animes populares (solo de animación japonesa)
+        const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=16&with_original_language=ja`);
+        setPopularAnimeJapanese(response.data.results.slice(0, 20)); // Obtener los 20 primeros animes populares de animación japonesa
+      } catch (error) {
+        console.error('Error fetching popular anime:', error);
+      }
+    };
 
-  const fetchTopRatedSeriesByCompany = async (company, minVote) => {
-    try {
-      // Obtener las series producidas por la compañía específica con puntuación superior al 50%
-      const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_companies=${company}&vote_average.gte=${minVote}`);
-      return response.data.results.slice(0, 20); // Obtener las 20 primeras series
-    } catch (error) {
-      console.error(`Error fetching top rated series from company ${company}:`, error);
-      return [];
-    }
-  };
+    const fetchPopularAnimeAmerican = async () => {
+      try {
+        // Obtener animación americana (género de animación y país de origen USA)
+        const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=16&with_original_language=en`);
+        setPopularAnimeAmerican(response.data.results.slice(0, 20)); // Obtener las 20 primeras animaciones americanas
+      } catch (error) {
+        console.error('Error fetching popular anime:', error);
+      }
+    };
 
-  const fetchTopRatedSeriesByNetwork = async (network, minVote) => {
-    try {
-      // Obtener las series asociadas al canal de TV específico con puntuación superior al 50%
-      const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=${network}&vote_average.gte=${minVote}`);
-      return response.data.results.slice(0, 20); // Obtener las 20 primeras series
-    } catch (error) {
-      console.error(`Error fetching top rated series from network ${network}:`, error);
-      return [];
-    }
-  };
+    const fetchLatestTrailers = async () => {
+      try {
+        // Obtener los últimos trailers
+        const upcomingResponse = await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}`);
+        const upcomingMovies = upcomingResponse.data.results.slice(0, 20); // Obtener las 20 primeras películas próximas
 
-  const fetchCurrentlyAiringSeriesByCompany = async (company) => {
-    try {
-      // Obtener las series producidas por la compañía específica que están actualmente en emisión
-      const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_companies=${company}&air_date.gte=${getCurrentDate()}&sort_by=popularity.desc`);
-      return response.data.results.slice(0, 20); // Obtener las 20 primeras series
-    } catch (error) {
-      console.error(`Error fetching currently airing series from company ${company}:`, error);
-      return [];
-    }
-  };
+        const trailers = await Promise.all(
+          upcomingMovies.map(async (movie) => {
+            const videoResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`);
+            const videoKey = videoResponse.data.results.length > 0 ? videoResponse.data.results[0].key : null;
+            return {
+              ...movie,
+              videoKey
+            };
+          })
+        );
 
-  const fetchCurrentlyAiringSeriesByNetwork = async (network) => {
-    try {
-      // Obtener las series asociadas al canal de TV específico que están actualmente en emisión
-      const response = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=${network}&air_date.gte=${getCurrentDate()}&sort_by=popularity.desc`);
-      return response.data.results.slice(0, 20); // Obtener las 20 primeras series
-    } catch (error) {
-      console.error(`Error fetching currently airing series from network ${network}:`, error);
-      return [];
-    }
-  };
+        setLatestTrailers(trailers.filter((trailer) => trailer.videoKey)); // Filtrar solo las películas que tienen trailers
+      } catch (error) {
+        console.error('Error fetching latest trailers:', error);
+      }
+    };
 
-  const getCurrentDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    let month = today.getMonth() + 1;
-    let day = today.getDate();
-
-    if (month < 10) {
-      month = `0${month}`;
-    }
-    if (day < 10) {
-      day = `0${day}`;
-    }
-
-    return `${year}-${month}-${day}`;
-  };
+    fetchTrending();
+    fetchPopularTV();
+    fetchPopularMovies();
+    fetchPopularAnimeJapanese();
+    fetchPopularAnimeAmerican();
+    fetchLatestTrailers();
+  }, [API_KEY, timeWindow]);
 
   const handleShowDetails = (item) => {
     setSelectedItem(item); // Establecer el elemento seleccionado
@@ -170,51 +108,82 @@ const Movies = ({ onAddToFavorites }) => {
     setSelectedItem(null); // Limpiar el elemento seleccionado al cerrar los detalles
   };
 
-  useEffect(() => {
-    // Filtrar las películas seleccionadas
-    const fetchSelectedMovies = async () => {
-      try {
-        const selectedMoviesPromises = peliculas.map(async (link) => {
-          const id = link.match(/\/movie\/(\d+)/)[1];
-          const response = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`);
-          return response.data;
-        });
+  const handleTimeWindowChange = (window) => {
+    setTimeWindow(window); // Cambiar el período de tiempo
+  };
 
-        const selectedMovies = await Promise.all(selectedMoviesPromises);
-        setFilteredMovies(selectedMovies);
-      } catch (error) {
-        console.error('Error fetching selected movies:', error);
-      }
-    };
+  const handlePopularCategoryChange = (category) => {
+    setPopularCategory(category); // Cambiar la categoría de "Lo más Popular"
+  };
 
-    fetchSelectedMovies();
-  }, [API_KEY]);
+  const handleAnimeCategoryChange = (category) => {
+    setAnimeCategory(category); // Cambiar la categoría de Anime
+  };
+
+  const handlePlayTrailer = (videoKey) => {
+    setSelectedTrailer(videoKey); // Establecer el trailer seleccionado
+  };
+
+  const handleCloseTrailer = () => {
+    setSelectedTrailer(null); // Limpiar el trailer seleccionado al cerrar el modal
+  };
 
   return (
     <div>
       <div>
-        <h2 style={{ fontSize: '1.2em', color: '#789', marginTop: '80px' }}>Series Populares</h2>
-        <ImageCarousel items={topRatedSeries} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />
+        <h2 style={{ fontSize: '2em', color: '#789', marginTop: '100px' }}>Tendencias</h2>
+        <div className="time-window-buttons">
+          <button className={timeWindow === 'day' ? 'active' : ''} onClick={() => handleTimeWindowChange('day')}>Hoy</button>
+          <button className={timeWindow === 'week' ? 'active' : ''} onClick={() => handleTimeWindowChange('week')}>Esta Semana</button>
+        </div>
+        <ImageCarousel items={trending} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />
       </div>
 
       <div>
-        <h2 style={{ fontSize: '1.2em', color: '#789', marginTop: '80px' }}>Series en Emisión</h2>
-        <ImageCarousel items={currentlyAiringSeries} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />
+        <h2 style={{ fontSize: '2em', color: '#789', marginTop: '80px' }}>Lo más Popular</h2>
+        <div className="category-buttons">
+          <button className={popularCategory === 'tv' ? 'active' : ''} onClick={() => handlePopularCategoryChange('tv')}>en Televisión</button>
+          <button className={popularCategory === 'movie' ? 'active' : ''} onClick={() => handlePopularCategoryChange('movie')}>en Cine</button>
+        </div>
+        {popularCategory === 'tv' && <ImageCarousel items={popularTV} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />}
+        {popularCategory === 'movie' && <ImageCarousel items={popularMovies} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />}
       </div>
 
       <div>
-        <h2 style={{ fontSize: '1.2em', color: '#789', marginTop: '80px' }}>Películas</h2>
-        <ImageCarousel items={filteredMovies} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />
+        <h2 style={{ fontSize: '2em', color: '#789', marginTop: '80px' }}>Animación Popular</h2>
+        <div className="category-buttons">
+          <button className={animeCategory === 'japanese' ? 'active' : ''} onClick={() => handleAnimeCategoryChange('japanese')}>Japonesa</button>
+          <button className={animeCategory === 'american' ? 'active' : ''} onClick={() => handleAnimeCategoryChange('american')}>Americana</button>
+        </div>
+        {animeCategory === 'japanese' && <ImageCarousel items={popularAnimeJapanese} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />}
+        {animeCategory === 'american' && <ImageCarousel items={popularAnimeAmerican} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} />}
+      </div>
+
+      <div>
+        <h2 style={{ fontSize: '2em', color: '#789', marginTop: '80px' }}>Últimos Trailers</h2>
+        <ImageCarousel items={latestTrailers} onAddToFavorites={onAddToFavorites} onShowDetails={handleShowDetails} onPlayTrailer={handlePlayTrailer} isTrailerSection={true} />
       </div>
 
       {selectedItem && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal" onClick={handleCloseDetails}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <span className="close" onClick={handleCloseDetails}>&times;</span>
             <h2>{selectedItem.title || selectedItem.name}</h2>
             <p>{selectedItem.overview}</p>
-            <p>Puntaje: {selectedItem.vote_average}</p>
-            <p>Actores: {selectedItem.credits.cast.map(actor => actor.name).join(', ')}</p>
+          </div>
+        </div>
+      )}
+
+      {selectedTrailer && (
+        <div className="modal" onClick={handleCloseTrailer}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close" onClick={handleCloseTrailer}>&times;</span>
+            <iframe
+              src={`https://www.youtube.com/embed/${selectedTrailer}`}
+              frameBorder="0"
+              allowFullScreen
+              title="Trailer"
+            />
           </div>
         </div>
       )}
