@@ -1,3 +1,5 @@
+// src/components/Footer.js
+
 import React from 'react';
 import './Footer.css';
 import twitterLogo from './img/twitter.svg';  // Ruta a la imagen de Twitter
@@ -6,12 +8,12 @@ import instagramLogo from './img/instagram.svg';  // Ruta a la imagen de Instagr
 import tiktokLogo from './img/tiktok.svg';  // Ruta a la imagen de TikTok
 import youtubeLogo from './img/youtube.svg';  // Ruta a la imagen de YouTube
 
-const Footer = () => {
+const Footer = ({ onNavigate }) => {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-links">
-          <a href="#">Sobre nosotros</a>
+          <a href="#" onClick={() => onNavigate('about')}>Sobre nosotros</a> {/* Utilizamos onNavigate */}
           <a href="#">Subscripciones</a>
           <a href="#">Noticias</a>
           <a href="#">Contacto</a>

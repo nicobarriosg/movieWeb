@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Favorites from './components/Favorites'; // Importa el componente de favoritos
 import Register from './components/Register'; // Importa el componente de registro
 import Login from './components/Login'; // Importa el componente de inicio de sesión
+import AboutUs from './components/AboutUs'; // Importa el componente AboutUs
 import './App.css';
 
 const API_KEY = '80e89e656f3520c549cf1e304130baec';
@@ -16,6 +17,8 @@ function App() {
   const [bannerImage, setBannerImage] = useState('');
   const [bannerTitle, setBannerTitle] = useState('');
   const [bannerId, setBannerId] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // Estado para almacenar el término de búsqueda
 
   const handleAddToFavorites = (item) => {
     if (!favorites.some(favorite => favorite.id === item.id)) {
@@ -25,6 +28,17 @@ function App() {
 
   const handleNavigate = (view) => {
     setCurrentView(view);
+  };
+
+  const handleSearch = async (query) => {
+    try {
+      const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`);
+      setSearchResults(response.data.results);
+      setCurrentView('search');
+      setSearchQuery(query); // Establece el término de búsqueda
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
   };
 
   useEffect(() => {
@@ -46,14 +60,14 @@ function App() {
 
     const interval = setInterval(() => {
       fetchPopularMovieBanner();
-    }, 10000); // Fetch cada 5 minutos
+    }, 10000); // Fetch cada 10 segundos
 
     return () => clearInterval(interval); // Limpieza al desmontar
   }, []);
 
   return (
     <div className="App">
-      <Navbar onNavigate={handleNavigate} />
+      <Navbar onNavigate={handleNavigate} onSearch={handleSearch} />
       {currentView === 'home' && (
         <>
           <div className="banner">
@@ -80,9 +94,26 @@ function App() {
       {currentView === 'favorites' && <Favorites favorites={favorites} />}
       {currentView === 'register' && <Register onNavigate={handleNavigate} />}
       {currentView === 'login' && <Login onNavigate={handleNavigate} />}
-      {currentView === 'about' && <div>Sobre nosotros</div>}
+      {currentView === 'about' && <AboutUs />}
+      {currentView === 'search' && (
+        <>
+          <div className="result-search">
+            <h2>Resultados de: {searchQuery}</h2>
+          </div>
+          <div className="search-results">
+            {searchResults.map(result => (
+              <div key={result.id} className="search-result-item">
+                <a href={`https://www.themoviedb.org/movie/${result.id}`} target="_blank" rel="noopener noreferrer">
+                  <img src={`https://image.tmdb.org/t/p/w200${result.poster_path}`} alt={result.title} />
+                  <h3>{result.title}</h3>
+                </a>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
       {currentView === 'profile' && <div>Mi perfil</div>}
-      <Footer />
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }

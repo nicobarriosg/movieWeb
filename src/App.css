@@ -150,3 +150,53 @@ body, html {
   color: #ffffff; /* Texto blanco para el footer */
   padding: 10px 0; /* Añade padding al footer */
 }
+
+
+/* src/App.css */
+
+/* App.css */
+
+.search-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  gap: 20px; /* Espaciado entre las tarjetas */
+}
+
+.search-result-item {
+  width: 200px; /* Ajusta el ancho según sea necesario */
+  text-align: center;
+}
+
+.search-result-item img {
+  width: 100%;
+  height: 300px; /* Ajusta la altura según sea necesario */
+  object-fit: cover; /* Ajusta la imagen para cubrir el contenedor */
+}
+
+.search-result-item h3 {
+  margin: 10px 0 0 0;
+  font-size: 1em;
+  color: rgb(119, 136, 153);
+  text-align: center;
+  word-wrap: break-word; /* Permite que el texto se ajuste a la siguiente línea si es necesario */
+}
+
+.search-result-item a {
+  text-decoration: none; /* Elimina la subrayado en los enlaces */
+  color: inherit; /* Mantiene el color del texto */
+}
+
+
+.search-query {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.5em;
+  color: #9ab;
+  margin-top: 100px;
+}
+
+.result-search {
+  color: rgb(119, 136, 153);
+  margin-top: 100px;
+}
