@@ -78,9 +78,9 @@ function App() {
               </a>
             </div>
             <div className="banner-text">
-              <p>Sigue las comedias que ves.</p>
+              <p>Sigue las series que ves.</p>
               <p>Ranquea peliculas.</p>
-              <p>Todo sobre el cine Chileno.</p>
+              <p>Todo sobre el séptimo arte.</p>
             </div>
             <div className="banner-button-container">
               <button className="banner-button" onClick={() => handleNavigate('register')}>

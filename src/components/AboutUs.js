@@ -49,13 +49,19 @@ const AboutUs = () => {
       <div className="about-us-content">
         <h1>Sobre Nosotros</h1>
         <p>
-          Nuestra tienda de LEGO fue fundada en el año XXXX con el objetivo de traer la alegría y la creatividad de los sets de LEGO a todos nuestros clientes. Desde entonces, hemos crecido hasta convertirnos en uno de los distribuidores de LEGO más grandes de la región, ofreciendo una amplia variedad de productos para todas las edades y gustos.
+        Bienvenidos a Rating, un espacio apasionado por el cine y las series que nació de la visión compartida de un grupo diverso de cinéfilos y aficionados a las series. Nuestra historia comenzó hace años, cuando un pequeño equipo de amigos con diferentes gustos y trasfondos se reunió con un objetivo común: crear un lugar donde cada película y serie pudiera encontrar su justo reconocimiento.
         </p>
         <p>
-          Nos enorgullece ofrecer no solo los últimos lanzamientos de LEGO, sino también sets exclusivos y de edición limitada. Nuestra misión es inspirar la creatividad y el aprendizaje a través del juego, brindando a nuestros clientes una experiencia de compra única y satisfactoria.
+        Desde entonces, hemos crecido y evolucionado, pero nuestra misión sigue siendo la misma: proporcionar a nuestros usuarios una plataforma donde puedan descubrir y evaluar películas y series de manera justa y objetiva. Creemos en la importancia de la crítica constructiva y en compartir nuestras pasiones cinematográficas de manera abierta y accesible.
         </p>
         <p>
-          Gracias por ser parte de nuestra historia. Esperamos seguir construyendo recuerdos y aventuras juntos.
+        En Rating, valoramos la diversidad de opiniones y perspectivas. Cada revisión, cada calificación y cada recomendación que encuentres aquí es el resultado de un debate honesto y reflexivo entre nuestro equipo y nuestra comunidad de usuarios. Nos esforzamos por ofrecer contenido que sea informativo, entretenido y útil para todos los amantes del cine y las series.        
+        </p>
+        <p>
+          Nuestro compromiso con la calidad y la imparcialidad nos impulsa a mejorar continuamente. Estamos emocionados de compartir nuestra pasión contigo y de seguir creciendo junto a nuestra comunidad. Únete a nosotros en este viaje cinematográfico y descubre nuevas historias que te emocionarán, te inspirarán y te entretendrán.
+        </p>
+        <p>
+          ¡Gracias por ser parte de Rating!
         </p>
       </div>
     </div>
